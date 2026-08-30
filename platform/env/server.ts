@@ -1,0 +1,13 @@
+import "server-only";
+
+import { parseServerEnv } from "@/platform/env/schema";
+
+export const serverEnv = parseServerEnv({
+  NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+  SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+  TRACKING_TOKEN_HMAC_SECRET: process.env.TRACKING_TOKEN_HMAC_SECRET,
+  VAPID_PRIVATE_KEY: process.env.VAPID_PRIVATE_KEY,
+});
