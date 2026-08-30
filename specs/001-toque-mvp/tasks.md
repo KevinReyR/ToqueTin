@@ -66,94 +66,94 @@ Este backlog se ejecuta en orden ascendente. Cada tarea está dimensionada para 
 
 ## Fase 2 — Persistencia y aislamiento
 
-- [ ] T021 [RF-4, RF-5, RF-8, RF-12] Crear una migración inicial con enums de dominio y el esquema privado para notificaciones.
+- [x] T021 [RF-4, RF-5, RF-8, RF-12] Crear una migración inicial con enums de dominio y el esquema privado para notificaciones.
   - Hecho cuando: la migración crea todos los enums cerrados y `private` sin conceder acceso directo a roles cliente.
 
-- [ ] T022 [RF-11, RF-12] Añadir `organizations`, `restaurants` y sus claves, timestamps y configuración de jornada.
+- [x] T022 [RF-11, RF-12] Añadir `organizations`, `restaurants` y sus claves, timestamps y configuración de jornada.
   - Hecho cuando: la migración crea ambas tablas, `America/Bogota`, corte `00:00` y las columnas de cambio pendiente descritas en el plan.
 
-- [ ] T023 [RF-1, RF-4, RF-5, RF-11, RF-12, RF-13] Añadir `restaurant_users` con membresía activa y rol de operador.
+- [x] T023 [RF-1, RF-4, RF-5, RF-11, RF-12, RF-13] Añadir `restaurant_users` con membresía activa y rol de operador.
   - Hecho cuando: la tabla tiene PK compuesta, FK a `auth.users`, índice inverso y solo `OPERATOR` es aceptado.
 
-- [ ] T024 [RF-1, RF-3, RF-4, RF-5, RF-9, RF-11, RF-12, RF-13] Añadir la tabla `orders` con estado, jornada, estimación, cancelación, hitos, actores y versión.
+- [x] T024 [RF-1, RF-3, RF-4, RF-5, RF-9, RF-11, RF-12, RF-13] Añadir la tabla `orders` con estado, jornada, estimación, cancelación, hitos, actores y versión.
   - Hecho cuando: la tabla contiene todos los campos definidos en el plan con timestamps UTC, FKs e imposibilidad de `DELETE` para roles de aplicación.
 
-- [ ] T025 [RF-1, RF-5, RF-9, RF-13] Añadir constraints de coherencia y unicidad a `orders`.
+- [x] T025 [RF-1, RF-5, RF-9, RF-13] Añadir constraints de coherencia y unicidad a `orders`.
   - Hecho cuando: PostgreSQL rechaza jornadas inválidas, duplicados normalizados por restaurante/jornada, estimaciones nulas y cancelaciones incoherentes.
 
-- [ ] T026 [RF-1, RF-11, RF-12] Añadir los índices operativos de `orders`.
+- [x] T026 [RF-1, RF-11, RF-12] Añadir los índices operativos de `orders`.
   - Hecho cuando: existen los índices de jornada/estado y de hitos `ready_at` y `delivered_at` definidos en el plan.
 
-- [ ] T027 [RF-4, RF-5, RF-9, RF-11] Añadir `order_status_history` como historial append-only.
+- [x] T027 [RF-4, RF-5, RF-9, RF-11] Añadir `order_status_history` como historial append-only.
   - Hecho cuando: la tabla registra origen, destino, motivo, actor y momento, y los roles de aplicación no pueden actualizar ni borrar eventos.
 
-- [ ] T028 [RF-2, RF-3, RF-10, RF-12] Añadir `tracking_sessions` con nonce, versión, revocación y expiración.
+- [x] T028 [RF-2, RF-3, RF-10, RF-12] Añadir `tracking_sessions` con nonce, versión, revocación y expiración.
   - Hecho cuando: nonce y sesión vigente son únicos, el token completo no tiene columna de almacenamiento y todas las FKs están indexadas.
 
-- [ ] T029 [RF-2, RF-3, RF-6, RF-10, RF-12] Añadir `tracking_viewers` con identidad anónima, tópico y vigencia.
+- [x] T029 [RF-2, RF-3, RF-6, RF-10, RF-12] Añadir `tracking_viewers` con identidad anónima, tópico y vigencia.
   - Hecho cuando: la PK e índices impiden grants duplicados y permiten autorizar por `auth.uid()`, tópico y expiración.
 
-- [ ] T030 [RF-8, RF-10, RF-12] Añadir `private.push_subscriptions` y `private.tracking_push_subscriptions`.
+- [x] T030 [RF-8, RF-10, RF-12] Añadir `private.push_subscriptions` y `private.tracking_push_subscriptions`.
   - Hecho cuando: endpoint digest es único, el material Web Push queda en `private` y una suscripción puede asociarse idempotentemente con varios trackings.
 
-- [ ] T031 [RF-7, RF-8, RF-10] Añadir `private.notifications` con unicidad e índice de despacho.
+- [x] T031 [RF-7, RF-8, RF-10] Añadir `private.notifications` con unicidad e índice de despacho.
   - Hecho cuando: la tabla impide duplicar `ORDER_READY` por pedido/suscripción y permite consultar intentos pendientes por `status` y `next_attempt_at`.
 
-- [ ] T032 [RF-1, RF-11] Implementar la función SQL que calcula una jornada desde zona IANA y hora de corte.
+- [x] T032 [RF-1, RF-11] Implementar la función SQL que calcula una jornada desde zona IANA y hora de corte.
   - Hecho cuando: pruebas cubren `00:00`, un corte personalizado, cruce de medianoche y conversión a UTC.
 
-- [ ] T033 [RF-11, RF-12] Implementar la promoción atómica de una hora de corte pendiente.
+- [x] T033 [RF-11, RF-12] Implementar la promoción atómica de una hora de corte pendiente.
   - Hecho cuando: la función conserva la jornada en curso y activa el nuevo corte solo al alcanzar su siguiente vigencia.
 
-- [ ] T034 [RF-1] Implementar la normalización SQL del número visible de pedido.
+- [x] T034 [RF-1] Implementar la normalización SQL del número visible de pedido.
   - Hecho cuando: espacios extremos y diferencias de mayúsculas producen la misma clave normalizada sin alterar el valor visible.
 
-- [ ] T035 [RF-12] Crear helpers SQL de autorización para membresía activa y tipo de identidad.
+- [x] T035 [RF-12] Crear helpers SQL de autorización para membresía activa y tipo de identidad.
   - Hecho cuando: las funciones distinguen operadores de usuarios anónimos y nunca autorizan mediante metadata editable.
 
-- [ ] T036 [RF-11, RF-12] Habilitar RLS y políticas de lectura para organizaciones, restaurantes y membresías.
+- [x] T036 [RF-11, RF-12] Habilitar RLS y políticas de lectura para organizaciones, restaurantes y membresías.
   - Hecho cuando: un operador solo lee los restaurantes con membresía vigente y un usuario anónimo no obtiene filas.
 
-- [ ] T037 [RF-1, RF-4, RF-5, RF-9, RF-11, RF-12, RF-13] Habilitar RLS de operador para `orders` y `order_status_history`.
+- [x] T037 [RF-1, RF-4, RF-5, RF-9, RF-11, RF-12, RF-13] Habilitar RLS de operador para `orders` y `order_status_history`.
   - Hecho cuando: lecturas y mutaciones cruzadas son denegadas y las políticas `UPDATE` validan tanto acceso previo como posterior.
 
-- [ ] T038 [RF-2, RF-3, RF-6, RF-10, RF-12] Habilitar RLS para sesiones y viewers de tracking.
+- [x] T038 [RF-2, RF-3, RF-6, RF-10, RF-12] Habilitar RLS para sesiones y viewers de tracking.
   - Hecho cuando: un viewer vigente lee solo su tracking, conocer otro nonce no concede acceso y un anónimo no obtiene permisos operativos.
 
-- [ ] T039 [RF-8, RF-10, RF-12] Revocar grants cliente sobre tablas del esquema `private` y definir el acceso mínimo del backend de notificaciones.
+- [x] T039 [RF-8, RF-10, RF-12] Revocar grants cliente sobre tablas del esquema `private` y definir el acceso mínimo del backend de notificaciones.
   - Hecho cuando: `anon` y `authenticated` no pueden leer endpoints, claves ni filas de notificación mediante SQL directo.
 
-- [ ] T040 [RF-6, RF-11, RF-12, RF-13] Crear políticas de tópicos privados sobre `realtime.messages`.
+- [x] T040 [RF-6, RF-11, RF-12, RF-13] Crear políticas de tópicos privados sobre `realtime.messages`.
   - Hecho cuando: tracking exige viewer vigente, dashboard exige membresía activa y ninguna política modifica objetos internos del esquema Realtime.
 
-- [ ] T041 [RF-1, RF-2, RF-9, RF-11, RF-12] Implementar la función transaccional de creación de pedido, historial y tracking.
+- [x] T041 [RF-1, RF-2, RF-9, RF-11, RF-12] Implementar la función transaccional de creación de pedido, historial y tracking.
   - Hecho cuando: una llamada autorizada crea las tres filas o ninguna, calcula la jornada, inicia en `RECEIVED` y devuelve el nonce confirmado.
 
-- [ ] T042 [RF-4, RF-9, RF-10, RF-12] Implementar la función transaccional de transición de estado.
+- [x] T042 [RF-4, RF-9, RF-10, RF-12] Implementar la función transaccional de transición de estado.
   - Hecho cuando: bloquea la fila, valida la matriz, fija el hito, incrementa versión y añade exactamente un evento.
 
-- [ ] T043 [RF-4, RF-9] Añadir idempotencia y control de concurrencia a la transición de estado.
+- [x] T043 [RF-4, RF-9] Añadir idempotencia y control de concurrencia a la transición de estado.
   - Hecho cuando: una repetición devuelve el estado vigente sin otro evento y dos acciones concurrentes convergen sin saltos válidos duplicados.
 
-- [ ] T044 [RF-5, RF-9, RF-10, RF-12] Implementar la función transaccional de cancelación.
+- [x] T044 [RF-5, RF-9, RF-10, RF-12] Implementar la función transaccional de cancelación.
   - Hecho cuando: solo cancela `RECEIVED` o `PREPARING`, valida el motivo, fija `cancelled_at` y registra el evento con motivo.
 
-- [ ] T045 [RF-6, RF-12, RF-13] Implementar la función transaccional de actualización de estimación.
+- [x] T045 [RF-6, RF-12, RF-13] Implementar la función transaccional de actualización de estimación.
   - Hecho cuando: actualiza fecha, marca `estimate_updated_at` y versión solo en `RECEIVED` o `PREPARING` para un operador autorizado.
 
-- [ ] T046 [RF-11, RF-12] Implementar la función de programación de hora de corte.
+- [x] T046 [RF-11, RF-12] Implementar la función de programación de hora de corte.
   - Hecho cuando: una membresía vigente programa el siguiente corte y un usuario ajeno no modifica la configuración.
 
-- [ ] T047 [RF-1, RF-9] Escribir pruebas pgTAP de creación, unicidad, atomicidad e historial inicial.
+- [x] T047 [RF-1, RF-9] Escribir pruebas pgTAP de creación, unicidad, atomicidad e historial inicial.
   - Hecho cuando: las pruebas demuestran creación completa, rollback sin huérfanos y duplicado solo dentro del mismo restaurante/jornada.
 
-- [ ] T048 [RF-4, RF-9] Escribir pruebas pgTAP de la matriz completa de transiciones e idempotencia.
+- [x] T048 [RF-4, RF-9] Escribir pruebas pgTAP de la matriz completa de transiciones e idempotencia.
   - Hecho cuando: todos los avances, saltos, retrocesos, estados finales y repeticiones tienen el resultado esperado sin historial extra.
 
-- [ ] T049 [RF-5, RF-9, RF-10] Escribir pruebas pgTAP de cancelación y expiración terminal inicial.
+- [x] T049 [RF-5, RF-9, RF-10] Escribir pruebas pgTAP de cancelación y expiración terminal inicial.
   - Hecho cuando: cubren los cuatro motivos, `OTHER`, estados prohibidos, motivo persistido y vigencia final de 24 horas.
 
-- [ ] T050 [RF-11, RF-12, RF-13] Escribir pruebas pgTAP de corte, estimación y aislamiento multi-tenant.
+- [x] T050 [RF-11, RF-12, RF-13] Escribir pruebas pgTAP de corte, estimación y aislamiento multi-tenant.
   - Hecho cuando: cubren cambio diferido, estados editables/bloqueados y accesos cruzados para dos restaurantes.
 
 ## Fase 3 — Operación del restaurante

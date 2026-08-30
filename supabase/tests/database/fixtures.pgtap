@@ -1,0 +1,87 @@
+create extension if not exists pgtap with schema extensions;
+create schema if not exists tests;
+
+create function tests.create_user(p_user_id uuid, p_email text)
+returns void
+language sql
+as $$
+  insert into auth.users (
+    id,
+    aud,
+    role,
+    email,
+    encrypted_password,
+    email_confirmed_at,
+    raw_app_meta_data,
+    raw_user_meta_data,
+    created_at,
+    updated_at
+  ) values (
+    p_user_id,
+    'authenticated',
+    'authenticated',
+    p_email,
+    'not-used-in-database-tests',
+    now(),
+    '{}'::jsonb,
+    '{}'::jsonb,
+    now(),
+    now()
+  );
+$$;
+
+create function tests.create_restaurant(
+  p_organization_name text,
+  p_restaurant_name text,
+  p_operator_id uuid,
+  p_timezone text default 'America/Bogota',
+  p_day_cutoff_time time without time zone default time '00:00'
+)
+returns bigint
+language plpgsql
+as $$
+declare
+  v_organization_id bigint;
+  v_restaurant_id bigint;
+begin
+  insert into public.organizations (name)
+  values (p_organization_name)
+  returning id into v_organization_id;
+
+  insert into public.restaurants (
+    organization_id,
+    name,
+    timezone,
+    day_cutoff_time
+  ) values (
+    v_organization_id,
+    p_restaurant_name,
+    p_timezone,
+    p_day_cutoff_time
+  )
+  returning id into v_restaurant_id;
+
+  insert into public.restaurant_users (restaurant_id, user_id)
+  values (v_restaurant_id, p_operator_id);
+
+  return v_restaurant_id;
+end;
+$$;
+
+create function tests.authenticate_as(p_user_id uuid, p_is_anonymous boolean default false)
+returns void
+language plpgsql
+as $$
+begin
+  perform set_config('request.jwt.claim.sub', p_user_id::text, true);
+  perform set_config(
+    'request.jwt.claims',
+    json_build_object(
+      'sub', p_user_id,
+      'role', 'authenticated',
+      'is_anonymous', p_is_anonymous
+    )::text,
+    true
+  );
+end;
+$$;
