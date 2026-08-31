@@ -6,7 +6,10 @@ vi.mock("@/platform/supabase/server", () => ({
   createClient: vi.fn(async () => ({ auth: { getClaims } })),
 }));
 
-import { getVerifiedClaims } from "@/application/auth/verified-claims";
+import {
+  getOperatorClaims,
+  getVerifiedClaims,
+} from "@/application/auth/verified-claims";
 
 describe("getVerifiedClaims", () => {
   beforeEach(() => {
@@ -23,5 +26,16 @@ describe("getVerifiedClaims", () => {
     getClaims.mockResolvedValue({ data: { claims: null } });
 
     await expect(getVerifiedClaims()).resolves.toBeNull();
+  });
+
+  it("accepts only permanent signed operator claims", () => {
+    expect(getOperatorClaims({ sub: "operator-id" })).toEqual({
+      subject: "operator-id",
+      isAnonymous: false,
+    });
+    expect(
+      getOperatorClaims({ sub: "viewer-id", is_anonymous: true }),
+    ).toBeNull();
+    expect(getOperatorClaims({ sub: 42 })).toBeNull();
   });
 });

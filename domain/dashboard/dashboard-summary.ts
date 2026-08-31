@@ -1,4 +1,5 @@
 import type { OrderStatus } from "@/domain/orders/types";
+import type { OperatorOrder } from "@/domain/orders/operator-order";
 
 export type OperationalInterval = {
   startedAt: string;
@@ -13,4 +14,8 @@ export type DashboardSummary = {
   totalActive: number;
   averagePreparationSeconds: number | null;
   averagePickupSeconds: number | null;
+};
+
+export type DashboardData = DashboardSummary & {
+  orders: OperatorOrder[];
 };

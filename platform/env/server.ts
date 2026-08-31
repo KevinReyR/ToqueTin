@@ -1,8 +1,9 @@
 import "server-only";
 
-import { parseServerEnv } from "@/platform/env/schema";
+import { parseServerEnv } from "@/platform/env/server-schema";
 
 export const serverEnv = parseServerEnv({
+  APP_BASE_URL: process.env.APP_BASE_URL,
   NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,

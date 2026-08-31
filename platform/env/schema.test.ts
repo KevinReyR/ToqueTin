@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { parsePublicEnv, parseServerEnv } from "@/platform/env/schema";
+import { parsePublicEnv } from "@/platform/env/schema";
+import { parseServerEnv } from "@/platform/env/server-schema";
 
 const validPublicEnv = {
   NEXT_PUBLIC_SUPABASE_URL: "http://127.0.0.1:54321",
@@ -10,6 +11,7 @@ const validPublicEnv = {
 
 const validServerEnv = {
   ...validPublicEnv,
+  APP_BASE_URL: "http://127.0.0.1:3000",
   SUPABASE_SERVICE_ROLE_KEY: "test-service-role-key",
   TRACKING_TOKEN_HMAC_SECRET: "12345678901234567890123456789012",
   VAPID_PRIVATE_KEY: "test-vapid-private-key",
